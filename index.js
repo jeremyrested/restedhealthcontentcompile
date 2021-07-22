@@ -75,6 +75,26 @@ async function downloadImage() {
   }
 }
 
+function validateJourneyCards(cards) {
+  Object.keys(cards).forEach((cardKey, index) => {
+    let card = cards[cardKey];
+    if (card.JourneySteps === undefined) {
+      // This card has no Journey Steps
+      console.log(`Card #: ${index} cardKey: '${cardKey}' title: '${card.Title}' has zero journey steps.`)
+    }
+  })
+}
+
+function validateTopics(topics) {
+  Object.keys(topics).forEach((topicKey, index) => {
+    let topic = topics[topicKey];
+    if (topic.JourneyCards === undefined) {
+      // This card has no Journey Steps
+      console.log(`Topic #: ${index} topicKey: '${topicKey}' name: '${topic.Name}' sequence: '${topic.Sequence}' --> has zero journey cards.`)
+    }
+  })
+}
+
 async function main() {
   const debug = false;
 
@@ -85,8 +105,10 @@ async function main() {
   console.log(`==============================\n`);
   console.log(`Calling fetchTopics`);
   const topics = await fetchRecords("Topic", debug);
+  validateTopics(topics);
   console.log(`fetched ${Object.keys(topics).length} topics to process.`);
   const cards = await fetchRecords("JourneyCard", debug);
+  validateJourneyCards(cards);
   console.log(`fetched ${Object.keys(cards).length} cards to process.`);
   const steps = await fetchRecords("JourneySteps", debug);
   console.log(`fetched ${Object.keys(steps).length} steps to process.`);
